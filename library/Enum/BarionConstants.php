@@ -34,6 +34,8 @@ abstract class BarionConstants {
     const API_ENDPOINT_CANCELAUTHORIZATION = "/Payment/CancelAuthorization";
     const API_ENDPOINT_3DS_COMPLETE = "/Payment/Complete";
     const API_ENDPOINT_BANK_TRANSFER = "/v3/Withdraw/BankTransfer";
+    const API_ENDPOINT_EMAIL_TRANSFER = "/Transfer/Email";
+    const API_ENDPOINT_ACCOUNTS = "/Accounts";
 
     const PAYMENT_URL = "/Pay";
 

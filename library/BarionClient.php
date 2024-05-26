@@ -28,6 +28,8 @@ namespace Bencurio\Barion;
 use Bencurio\Barion\Enum\BarionConstants;
 use Bencurio\Barion\Enum\BarionEnvironment;
 use Bencurio\Barion\Enum\QRCodeSize;
+use Bencurio\Barion\Models\Account\AccountsRequestModel;
+use Bencurio\Barion\Models\Account\AccountsResponseModel;
 use Bencurio\Barion\Models\ApiErrorModel;
 use Bencurio\Barion\Models\BaseResponseModel;
 use Bencurio\Barion\Models\Payment\CancelAuthorizationRequestModel;
@@ -47,6 +49,8 @@ use Bencurio\Barion\Models\Transfer\BankTransferRequestModel;
 use Bencurio\Barion\Models\Transfer\BankTransferResponseModel;
 use Bencurio\Barion\Models\Refund\RefundRequestModel;
 use Bencurio\Barion\Models\Refund\RefundResponseModel;
+use Bencurio\Barion\Models\Transfer\EmailTransferRequestModel;
+use Bencurio\Barion\Models\Transfer\EmailTransferResponseModel;
 
 class BarionClient
 {
@@ -264,24 +268,62 @@ class BarionClient
     }
 
     /**
-      * Transfer the specified amount to a bank account
-      *
-      * @param string $model The BankTransferRequestModel to be passed
-      * @return BankTransferResponseModel Returns the response from the Barion API
-      */
-      public function BankTransfer(BankTransferRequestModel $model)
-      {
-          $model->POSKey = $this->POSKey;
-          $url = $this->BARION_API_URL . BarionConstants::API_ENDPOINT_BANK_TRANSFER;
-          $response = $this->PostToBarion($url, $model);
- 
-          $ps = new BankTransferResponseModel();
-          if (!empty($response)) {
-              $json = json_decode($response, true);
-              $ps->fromJson($json);
-          }
-          return $ps;
-      }
+     * Transfer the specified amount to a bank account
+     *
+     * @param string $model The BankTransferRequestModel to be passed
+     * @return BankTransferResponseModel Returns the response from the Barion API
+     */
+    public function BankTransfer(BankTransferRequestModel $model)
+    {
+        $model->POSKey = $this->POSKey;
+        $url = $this->BARION_API_URL . BarionConstants::API_ENDPOINT_BANK_TRANSFER;
+        $response = $this->PostToBarion($url, $model);
+
+        $ps = new BankTransferResponseModel();
+        if (!empty($response)) {
+            $json = json_decode($response, true);
+            $ps->fromJson($json);
+        }
+        return $ps;
+    }
+
+    /**
+     * Transfer the specified amount to a Barion Wallet
+     *
+     * @param string $model The EmailTransferRequestModel to be passed
+     * @return EmailTransferResponseModel Returns the response from the Barion API
+     */
+    public function EmailTransfer(EmailTransferRequestModel $model)
+    {
+        $model->POSKey = $this->POSKey;
+        $url = $this->BARION_API_URL . BarionConstants::API_ENDPOINT_EMAIL_TRANSFER;
+        $response = $this->PostToBarion($url, $model);
+
+        $et = new EmailTransferResponseModel();
+        if (!empty($response)) {
+            $json = json_decode($response, true);
+            $et->fromJson($json);
+        }
+        return $et;
+    }
+
+    /**
+     * Query the existing ccounts of the calling user
+     *
+     * @return AccountsResponseModel Returns the response from the Barion API
+     */
+    public function Accounts()
+    {
+        $model = new AccountsRequestModel();
+        $url = $this->BARION_API_URL . "/v" . $this->APIVersion . BarionConstants::API_ENDPOINT_ACCOUNTS;
+        $response = $this->GetFromBarion($url, $model);
+        $a = new AccountsResponseModel();
+        if (!empty($response)) {
+            $json = \json_decode($response, true);
+            $a->fromJson($json);
+        }
+        return $a;
+    }
 
     /* -------- CURL HTTP REQUEST IMPLEMENTATIONS -------- */
 
