@@ -230,7 +230,7 @@ class BarionClient
     public function GetPaymentState($paymentId)
     {
         $url = $this->BARION_API_URL.'/v4/payment/'.$paymentId.'/paymentstate';
-        $response = $this->GetFromBarion($url, [], ['x-pos-key' => $this->POSKey]);
+        $response = $this->GetFromBarion($url, [], ['x-pos-key: '.$this->POSKey]);
         $ps = new PaymentStateResponseModel();
         if (!empty($response)) {
             $json = \json_decode($response, true);
