@@ -19,6 +19,7 @@
 namespace Bencurio\Barion\Models\Transfer;
 
 use Bencurio\Barion\Models\BaseRequestModel;
+use Bencurio\Barion\Models\Common\MoneyModel;
 
 class EmailTransferRequestModel extends BaseRequestModel
 {
@@ -30,7 +31,7 @@ class EmailTransferRequestModel extends BaseRequestModel
     function __construct()
     {
         $this->SourceAccountId = "";
-        $this->Amount = 0;
+        $this->Amount = new MoneyModel();
         $this->TargetEmail = "";
         $this->Comment = "";
     }
