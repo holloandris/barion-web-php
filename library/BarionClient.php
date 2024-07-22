@@ -41,7 +41,6 @@ use Bencurio\Barion\Models\Payment\Complete3DSPaymentResponseModel;
 use Bencurio\Barion\Models\Payment\FinishReservationRequestModel;
 use Bencurio\Barion\Models\Payment\FinishReservationResponseModel;
 use Bencurio\Barion\Models\Payment\PaymentQRRequestModel;
-use Bencurio\Barion\Models\Payment\PaymentStateRequestModel;
 use Bencurio\Barion\Models\Payment\PaymentStateResponseModel;
 use Bencurio\Barion\Models\Payment\PreparePaymentRequestModel;
 use Bencurio\Barion\Models\Payment\PreparePaymentResponseModel;
@@ -230,10 +229,8 @@ class BarionClient
      */
     public function GetPaymentState($paymentId)
     {
-        $model = new PaymentStateRequestModel($paymentId);
-        $model->POSKey = $this->POSKey;
-        $url = $this->BARION_API_URL . "/v" . $this->APIVersion . BarionConstants::API_ENDPOINT_PAYMENTSTATE;
-        $response = $this->GetFromBarion($url, $model);
+        $url = $this->BARION_API_URL.'/v4/payment/'.$paymentId.'/paymentstate';
+        $response = $this->GetFromBarion($url, [], ['x-pos-key' => $this->POSKey]);
         $ps = new PaymentStateResponseModel();
         if (!empty($response)) {
             $json = \json_decode($response, true);
@@ -391,7 +388,7 @@ class BarionClient
      * @param object $data The data object to be sent to the endpoint
      * @return mixed|string Returns the response of the API
      */
-    private function GetFromBarion($url, $data)
+    private function GetFromBarion($url, $data, $headerData = [])
     {
         $ch = \curl_init();
 
@@ -406,7 +403,7 @@ class BarionClient
 
         \curl_setopt($ch, CURLOPT_URL, $fullUrl);
         \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        \curl_setopt($ch, CURLOPT_HTTPHEADER, array("User-Agent: $userAgent", "x-api-key: $this->APIKey"));
+        \curl_setopt($ch, CURLOPT_HTTPHEADER, array_merge(["User-Agent: $userAgent", "x-api-key: $this->APIKey"], $headerData));
         
         if(\substr(\phpversion(), 0, 3) < 5.6) {
             \curl_setopt($ch, CURLOPT_SSLVERSION, 6);

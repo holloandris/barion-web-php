@@ -26,7 +26,6 @@ abstract class BarionConstants {
     const BARION_WEB_URL_TEST = "https://secure.test.barion.com/Pay";
 
     const API_ENDPOINT_PREPAREPAYMENT = "/Payment/Start";
-    const API_ENDPOINT_PAYMENTSTATE = "/Payment/GetPaymentState";
     const API_ENDPOINT_QRCODE = "/QR/Generate";
     const API_ENDPOINT_REFUND = "/Payment/Refund";
     const API_ENDPOINT_FINISHRESERVATION = "/Payment/FinishReservation";
