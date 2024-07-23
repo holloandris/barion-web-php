@@ -293,7 +293,7 @@ class BarionClient
     public function EmailTransfer(EmailTransferRequestModel $model)
     {
         $model->POSKey = $this->POSKey;
-        $url = $this->BARION_API_URL . BarionConstants::API_ENDPOINT_EMAIL_TRANSFER;
+        $url = $this->BARION_API_URL . "/v" . $this->APIVersion . BarionConstants::API_ENDPOINT_EMAIL_TRANSFER;
         $response = $this->PostToBarion($url, $model);
 
         $et = new EmailTransferResponseModel();
